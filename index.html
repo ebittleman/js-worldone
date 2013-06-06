@@ -63,9 +63,12 @@
 
 
 			function init(){
-				var img = new Image();
-				img.onload = imageLoaded;
-				img.src = images[currImg];
+
+				for(var i = 0; i < images.length; i++) {
+					var img = new Image();
+					img.src = images[i];
+				}
+				main();
 			}
 
 			function imageLoaded(){
