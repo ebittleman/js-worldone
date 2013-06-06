@@ -1,28 +1,25 @@
-<?php
-
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title>Bittles.net :: Have Fun!</title>
-		
+
 		<script type="text/javascript" src="./js/global.js"></script>
 		<script type="text/javascript" src="./js/eblist.js"></script>
 		<script type="text/javascript" src="./js/worldObj.js"></script>
 		<script type="text/javascript">
 			var pb = null;
 			var pf = null;
-			
+
 			var leftInt = null;
 			var rightInt = null;
 			var jump = true;
 			var jumpUp = null;
 			var jumpDown = null;
-			
+
 			var userSpace = null;
 			var currLoc = {x:0,y:0,w:15,h:27,a:100,BG : 'url(./imgs/mario34.gif) -11px -5px',jump:true};
-			
+
 			var aiList = [	{x:410,y:25,w:35,h:35,a:100,bx:20,dx:1,BG : 'url(./imgs/Goomba.gif)',jump:true},
 							{x:350,y:105,w:35,h:35,a:100,bx:50,dx:1,BG : 'url(./imgs/Goomba.gif)',jump:true},
 							{x:475,y:25,w:35,h:35,a:100,bx:75,dx:1,BG : 'url(./imgs/Goomba.gif)',jump:true}
@@ -43,34 +40,34 @@
 							'./imgs/brick.jpg']
 			var currImg = 0;
 			var imgLimit = images.length;
-			
+
 			var userLayer;
-			
+
 			var worldSpace;
 			var worldLayer;
-			
+
 			var funSpace;
 			var funLayer;
-			
-			
+
+
 			var lifeBar;
-			
+
 			var mainLoop = null;
-			
+
 			var invincible = false;
 			var aiLayer = null;
-			
+
 			var worldBottom = 0;
 			var clock = 33;
-			
-			
-				
+
+
+
 			function init(){
 				var img = new Image();
 				img.onload = imageLoaded;
 				img.src = images[currImg];
 			}
-			
+
 			function imageLoaded(){
 				if(currImg < (imgLimit - 1)){
 					currImg++;
@@ -85,8 +82,8 @@
 				aiSpace = $('aiLayer');
 				userSpace = $('userLayer');
 				lifeBar = $('lifebar');
-				
-				
+
+
 					worldLayer = new EBList(worldSpace,null,'block',paintBox);
 					platforms[platforms.length - 1].w = 5000;
 					platforms[platforms.length - 1].h = 5000;
@@ -94,28 +91,28 @@
 						worldLayer.add(platforms[i]);
 					}
 					//worldLayer.edit(i-1,{w:5000,h:5000});
-					
+
 					worldSpace.lastChild.style.width = "100%";
 					worldSpace.lastChild.style.height = "20px";
 					worldSpace.lastChild.firstChild.style.width = "100%";
-	
+
 					aiLayer = new EBList(aiSpace,null,'block',paintBox);
 					for(i in aiList){
 						aiLayer.add(aiList[i]);
 					}
-					
+
 					userLayer = new EBList(userSpace,null,'winWrapper',paintBox);
 					userLayer.add(currLoc);
-	
+
 					funSpace = $('funLayer');
 					funLayer = new EBList(funSpace,null,'block',paintQuote);
 					funLayer.add({x:0,y:0,w:100,h:16,value:'',BG : 'white'});
-					
+
 					lifeBar.innerHTML = '5';
 					mainLoop = setInterval(renderFrame,clock);
 					setListener();
-			
-				
+
+
 			}
 			var rendering = false;
 			function renderFrame(){
@@ -124,7 +121,7 @@
 				userData();
 				AI();
 				collisionDetection();
-				
+
 				userLayer.edit(0,currLoc);
 				funLayer.edit(0,{x:currLoc.x + 14,y:currLoc.y - 23})
 				rendering = false;
@@ -142,7 +139,7 @@
 							'></div>';
 					return html;
 			}
-			
+
 			function paintQuote(){
 				var html = '<div id="box"'+
 								'style="'+
@@ -156,7 +153,7 @@
 							'>'+this.value+'</div>';
 					return html;
 			}
-			
+
 			function userData(){
 				if(rightInt){
 					currLoc.x += 5;
@@ -178,9 +175,9 @@
 					 }
 					currLoc.y += 10;
 				}
-				
+
 			}
-			
+
 			function toggleBG(){
 				if(currLoc.BG == ''){
 					currLoc.BG = 'url(./imgs/mario34.gif) -11px -5px';
@@ -193,14 +190,14 @@
 					currLoc.BG = 'url(./imgs/mario34.gif) -11px -5px';
 				}
 			}
-			
+
 			function AI(){
 				moveNodes(aiLayer,aiList,mAICallback);
 				moveNodes(worldLayer,platforms,mPCallback);
-				
+
 				testListCollisions(currLoc,aiLayer,testSide);
 			}
-			
+
 			function moveNodes(ebList,iniList,callback){
 				for(i in  ebList.data){
 					node = ebList.data[i];
@@ -231,19 +228,19 @@
 					if(callback){
 						callback(ebList,i);
 					}
-					
+
 				}
 			}
-			
+
 			function mPCallback(ebList,i){
 				var node = ebList.data[i];
 				if(node.y >= platforms[i].y && node.tC){
 					node.dy = 0;
 					node.y = platforms[i].y;
 				}
-				
+
 			}
-			
+
 			function mAICallback(ebList,i){
 				var node = ebList.data[i];
 				if(node.jump)
@@ -259,16 +256,16 @@
 					//node.y += node.onTopOf.dy;
 				}
 				testListCollisions(node,worldLayer,aiColl);
-				
+
 				if(node.onTopOf){
 					if(	(node.onTopOf.x > (node.x + node.w)) || (node.x > (node.onTopOf.x + node.onTopOf.w))){
 						node.jump = true;
 						node.onTopOf = null;
 					}
 				}
-				
+
 			}
-			
+
 			function aiColl(ebList,node,index,toTest){
 				if(toTest.onTopOf){
 					if(	(toTest.onTopOf.x > (node.x + node.w)) || (node.x > (toTest.onTopOf.x + toTest.onTopOf.w))){
@@ -277,7 +274,7 @@
 					}
 				}
 			}
-			
+
 			function testSide(ebList,node){
 				if(node.y >= currLoc.y+currLoc.h){
 					aiList.splice(ebList.remove(node),1);
@@ -294,7 +291,7 @@
 					}
 				}
 			}
-			
+
 			function toggleInvinciblity(){
 				invincible = !invincible;
 				if(invincible){
@@ -302,7 +299,7 @@
 					setTimeout(toggleBG,0);
 				}
 			}
-			
+
 			function worldCollision(ebList,node){
 				//on top
 				if(node.y >= currLoc.y+currLoc.h){
@@ -317,7 +314,7 @@
 					}
 				}
 			}
-			
+
 			function collisionDetection(){
 				if(currLoc.x < 0){
 					currLoc.x =getDim(userSpace,true) - currLoc.w;// 0;//
@@ -325,9 +322,9 @@
 				if((currLoc.x + currLoc.w) > getDim(userSpace,true)){
 					currLoc.x = 0;//getDim(userSpace,true) - currLoc.w;//
 				}
-				
+
 				testListCollisions(currLoc,worldLayer,worldCollision);
-				
+
 				if(currLoc.onTopOf){
 					if(	(currLoc.onTopOf.x > (currLoc.x + currLoc.w)) || (currLoc.x > (currLoc.onTopOf.x + currLoc.onTopOf.w))){
 						currLoc.jump = true;
@@ -335,9 +332,9 @@
 					}
 				}
 			}
-			
+
 			function testListCollisions(toTest,  ebList,callback){
-				
+
 				var list = ebList.data;
 				for(index in list){
 					var node = list[index];
@@ -346,19 +343,19 @@
 					}
 				}
 			}
-			
+
 			function testNode(toTest , node){
 				var coll = testCollision(toTest,node);
 					coll = (testCollision(node,toTest) || coll);
-				
+
 				if(rightInt && coll && !toTest.jump){
 					toTest.x = node.x - toTest.w;
 				}
-				
+
 				if(leftInt && coll && !toTest.jump){
 					toTest.x =node.x+node.w;
 				}
-				
+
 				if(toTest.jump){
 					if(toTest.jumpUp){
 						if(coll && (toTest.y >= node.y)){
@@ -373,47 +370,47 @@
 						}
 					}
 				}
-				
+
 				return coll;
 			}
-			
+
 			function testCollision(node1,node2){
 				var bounds1 = {l:node1.x,r:(node1.x+node1.w),t:node1.y,b:(node1.y+node1.h)};
 				var bounds2 = {l:node2.x,r:(node2.x+node2.w),t:node2.y,b:(node2.y+node2.h)};
-				
+
 				//test bottom,left (boudnds1.l,bounds1.b)
 				var point = {x:bounds1.l,y:bounds1.b};
 				if(testCorner(point,bounds2)){
 					return true;
 				}
-				
+
 				//test top,left (boudnds1.l,bounds1.t)
 				point = {x:bounds1.l,y:bounds1.t};
 				if(testCorner(point,bounds2)){
 					return true;
 				}
-				
+
 				//test bottom,right (boudnds1.r,bounds1.b)
 				point = {x:bounds1.r,y:bounds1.b};
 				if(testCorner(point,bounds2)){
 					return true;
 				}
-				
+
 				//test top,right (boudnds1.r,bounds1.t)
 				point = {x:bounds1.r,y:bounds1.t};
 				if(testCorner(point,bounds2)){
 					return true;
 				}
-				
+
 				return false;
 			}
-			
+
 			function testCorner(point,box){
 				if(!((point.x < box.r) && (point.x > box.l) ))return false;
 				if(!((point.y > box.t)&&(point.y < box.b)))return false;
 				return true;
 			}
-			
+
 			function setListener(){
 				document.onkeydown = function(e){
 					if(!e)var e = window.event;
@@ -426,7 +423,7 @@
 					}
 					return true;
 				}
-				
+
 				document.onkeypress = function(e){
 					if(!e)var e = window.event;
 					if((e.keyCode || e.which) == 32){
@@ -438,7 +435,7 @@
 					}
 					return true;
 				}
-				
+
 				document.onclick = function(e){
 					//if(!e)var e = window.event;
 					//if((e.keyCode || e.which) == 32){
@@ -449,7 +446,7 @@
 						currLoc.jumpUp = true;
 					//}
 				}
-					
+
 				document.onkeyup = function(e){
 					if(!e)var e = window.event;
 					if((e.keyCode || e.which) == 39){
@@ -472,16 +469,16 @@
 						}
 						return true;
 					}
-					
+
 					var val =((e.keyCode || e.which) != 8)? funLayer.data[0].value + String.fromCharCode((e.keyCode || e.which)):funLayer.data[0].value.substr(0,funLayer.data[0].value.length-1);
-					
+
 					funLayer.edit(0,{value:val})
 					return true;
 					//console.log(String.fromCharCode((e.keyCode || e.which)));
 				}
 			}
 		</script>
-		
+
 		<link rel="stylesheet" type="text/css" href="./css/win.css">
 		<link rel="stylesheet" type="text/css" href="./css/global.css">
 		<style type="text/css">
@@ -501,7 +498,7 @@
 			<div id="userLayer" class="winWrapper"></div>
 			<div id="funLayer" class="winWrapper"></div>
 			<div id="lifebar"></div>
-		
+
 		</div>
 	</body>
 </html>
