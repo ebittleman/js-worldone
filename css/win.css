@@ -1,0 +1,101 @@
+.window{
+	position:absolute;
+	display:block;
+	overflow : hidden;
+}
+	.winElements{
+		position: relative;
+		display:block;
+		overflow : hidden;
+		padding : 3px;
+	}
+		
+		.winBG{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 100%;
+			width: 100%;
+			overflow : hidden;
+		}
+		.winTitle{
+			position: relative;
+			width: 100%;
+			height: 15px;
+			overflow : hidden;
+			cursor : move;
+			background : blue;
+		}
+		.winCanvas{
+			position:relative;
+			width: 100%;
+			overflow : hidden;
+		}
+		.winStatus{
+			position: relative;
+			width: 100%;
+			height: 15px;
+			overflow : hidden;
+			background : red;
+		}
+	
+	.winResize{
+		position : absolute;
+		background : green;
+	}
+		
+		.winResizeLR{
+			width : 3px;
+			height : 100%;
+		}
+		.winResizeTB{
+			height : 3px;
+			width : 100%;
+		}
+			
+			.winRT{
+				top:0px;
+				left:0px;
+				cursor : n-resize;
+			}
+			.winRB{
+				bottom:0px;
+				left:0px;
+				cursor : s-resize;
+			}
+			.winRL{
+				top:0px;
+				left:0px;
+				cursor : w-resize;
+			}
+			.winRR{
+				top:0px;
+				right:0px;
+				cursor : e-resize;
+			}
+		
+		.winResizeCorner{
+			height : 5px;
+			width : 5px;
+			background : orange;
+		}
+			.winTL{
+				top:0px;
+				left:0px;
+				cursor : nw-resize;
+			}
+			.winTR{
+				top:0px;
+				right:0px;
+				cursor : ne-resize;
+			}
+			.winBL{
+				bottom:0px;
+				left:0px;
+				cursor : sw-resize;
+			}
+			.winBR{
+				bottom:0px;
+				right:0px;
+				cursor : se-resize;
+			}
