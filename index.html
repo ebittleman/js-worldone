@@ -63,12 +63,9 @@
 
 
 			function init(){
-
-				for(var i = 0; i < images.length; i++) {
-					var img = new Image();
-					img.src = images[i];
-				}
-				main();
+				var img = new Image();
+				img.onload = imageLoaded;
+				img.src = images[currImg];
 			}
 
 			function imageLoaded(){
@@ -494,7 +491,7 @@
 			}
 		</style>
 	</head>
-	<body onload="main()">
+	<body onload="init()">
 		<div id="globalWrapper" class="globalWrapper">
 			<div id="worldLayer" class="winWrapper"></div>
 			<div id="aiLayer" class="winWrapper"></div>
